@@ -1,4 +1,4 @@
-package br.com.aleson.coretools
+package br.com.aleson.core.tools.app
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("br.com.aleson.coretools", appContext.packageName)
+        assertEquals("br.com.aleson.core.tools.app", appContext.packageName)
     }
 }

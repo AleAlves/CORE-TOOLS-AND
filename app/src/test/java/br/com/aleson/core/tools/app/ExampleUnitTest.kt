@@ -1,4 +1,4 @@
-package br.com.aleson.coretools
+package br.com.aleson.core.tools.app
 
 import org.junit.Test
 
