@@ -35,12 +35,11 @@ class AESImpl : AES {
     }
 
     private fun generateSalt(length: Int): String {
-        val SALTCHARS = STANDAR_CHARS
         val salt = StringBuilder()
         val random = Random(System.currentTimeMillis())
         while (salt.length < length) {
-            val index = (random.nextFloat() * SALTCHARS.length).toInt()
-            salt.append(SALTCHARS[index])
+            val index = (random.nextFloat() * STANDAR_CHARS.length).toInt()
+            salt.append(STANDAR_CHARS[index])
         }
         return salt.toString()
     }

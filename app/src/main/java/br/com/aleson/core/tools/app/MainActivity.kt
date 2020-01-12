@@ -31,6 +31,9 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+        val encrypted = core.crypto.AES().encrypt("wow")
+        val plainData = core.crypto.AES().decrypt(encrypted)
+        Log.d("CORE_LOG", "$encrypted - $plainData")
 
         core.retrofit?.request()?.create(PublicKeyRequest::class.java)?.getPublicKey()
             ?.enqueue(object : Callback<PublicKey> {
@@ -42,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<PublicKey>, response: Response<PublicKey>) {
                     Toast.makeText(
                         applicationContext,
-                        "Sucess version: " + (response.body() as PublicKey).publicKey,
+                        "Sucess RSA: " + (response.body() as PublicKey).publicKey,
                         Toast.LENGTH_LONG
                     ).show()
                     val rsaEncryptes = core.crypto.RSA((response.body() as PublicKey).publicKey)?.encrypt("wow")
@@ -54,9 +57,5 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
-
-        val encrypted = core.crypto.AES()?.encrypt("test")
-        val plainData = core.crypto.AES()?.decrypt(encrypted)
-        Log.d("CORE_LOG", "$encrypted - $plainData")
     }
 }

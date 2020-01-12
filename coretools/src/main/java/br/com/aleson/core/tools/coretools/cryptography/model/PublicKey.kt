@@ -1,6 +1,6 @@
 package br.com.aleson.core.tools.coretools.cryptography.model
 
-import br.com.aleson.core.tools.coretools.Status
+import br.com.aleson.core.tools.coretools.retrofit.domain.Status
 import com.google.gson.annotations.SerializedName
 
 data class PublicKey(

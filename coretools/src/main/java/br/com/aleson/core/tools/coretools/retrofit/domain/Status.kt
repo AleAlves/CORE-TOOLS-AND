@@ -1,4 +1,4 @@
-package br.com.aleson.core.tools.coretools
+package br.com.aleson.core.tools.coretools.retrofit.domain
 
 import com.google.gson.annotations.SerializedName
 

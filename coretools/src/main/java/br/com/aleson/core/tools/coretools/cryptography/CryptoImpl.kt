@@ -10,20 +10,18 @@ class CryptoImpl : Crypto {
     private var rsa: RSA? = null
     private var aes: AES? = null
 
-    override fun RSA(publicKey: String): RSA? {
-        return if (rsa == null) {
-            RSAimpl(publicKey)
-        } else {
-            rsa
+    override fun RSA(publicKey: String): RSA {
+        if (rsa == null) {
+            rsa = RSAimpl(publicKey)
         }
+        return rsa!!
     }
 
-    override fun AES(): AES? {
-        return if (aes == null) {
-            AESImpl()
-        } else {
-            aes
+    override fun AES(): AES {
+        if (aes == null) {
+            aes = AESImpl()
         }
+        return aes!!
     }
 
 }

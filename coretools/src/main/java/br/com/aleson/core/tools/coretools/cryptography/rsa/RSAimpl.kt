@@ -1,6 +1,7 @@
 package br.com.aleson.core.tools.coretools.cryptography.rsa
 
 import android.util.Base64
+import br.com.aleson.core.tools.coretools.cryptography.PUBLIC_KEY_CLEN_REGEX
 import br.com.aleson.core.tools.coretools.cryptography.RSA_KDF
 import br.com.aleson.core.tools.coretools.cryptography.RSA_PADDING_SCHEME
 import java.security.KeyFactory
@@ -11,7 +12,7 @@ import javax.crypto.Cipher
 class RSAimpl(private var publicKey: String) : RSA {
 
     private fun clearPublicKey(publicKey: String): String {
-        return publicKey.replace("(-+BEGIN PUBLIC KEY-+\\r?\\n|-+END PUBLIC KEY-+\\r?\\n?)".toRegex(), "")
+        return publicKey.replace(PUBLIC_KEY_CLEN_REGEX, "")
     }
 
     private fun clearDataBreakLines(data: String): String {
