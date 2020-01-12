@@ -1,4 +1,4 @@
-package br.com.aleson.core.tools.coretools
+package br.com.aleson.core.tools.coretools.retrofit
 
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
