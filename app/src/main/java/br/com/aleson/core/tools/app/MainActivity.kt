@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                         "Sucess RSA: " + (response.body()?.data as PublicKey).publicKey,
                         Toast.LENGTH_LONG
                     ).show()
-                    val rsaEncryptes = core.crypto.RSA((response.body()?.data as PublicKey).publicKey)?.encrypt("wow")
+                    val rsaEncryptes = core.crypto.RSA((response.body()?.data as PublicKey).publicKey).encrypt("wow")
                     Toast.makeText(
                         applicationContext,
                         "RSA version: $rsaEncryptes",
