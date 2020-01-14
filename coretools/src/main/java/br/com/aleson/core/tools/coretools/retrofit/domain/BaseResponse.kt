@@ -2,10 +2,11 @@ package br.com.aleson.core.tools.coretools.retrofit.domain
 
 import com.google.gson.annotations.SerializedName
 
-
-data class Status(
+class BaseResponse (
     @SerializedName("code")
     var code: Int,
     @SerializedName("status")
-    var status: String
+    var status: String,
+    @SerializedName("message")
+    var message: String
 )
