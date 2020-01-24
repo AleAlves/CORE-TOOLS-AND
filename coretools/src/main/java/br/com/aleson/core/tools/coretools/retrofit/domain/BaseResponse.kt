@@ -6,7 +6,5 @@ class BaseResponse (
     @SerializedName("code")
     var code: Int,
     @SerializedName("status")
-    var status: String,
-    @SerializedName("message")
-    var message: String
+    var status: String
 )

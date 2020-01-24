@@ -5,6 +5,7 @@ import br.com.aleson.core.tools.coretools.cryptography.AES_ALGORITHM
 import br.com.aleson.core.tools.coretools.cryptography.AES_KDF
 import br.com.aleson.core.tools.coretools.cryptography.AES_PADDING_SCHEME
 import br.com.aleson.core.tools.coretools.cryptography.STANDAR_CHARS
+import com.google.gson.Gson
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
@@ -18,12 +19,14 @@ class AESImpl : AES {
     private var secretKeySpec: SecretKeySpec? = null
     private val iterationCount = 2048
     private val keyStrength = 256
-    private var ivParameterSpec: IvParameterSpec? = IvParameterSpec(generateSalt(8).toByteArray())
-
+    private var ivParameterSpec: IvParameterSpec? = null
+    private var key: String
+    private var salt: String
+    private var iv: ByteArray?
 
     init {
-        val key = generateSalt(16)
-        val salt = generateSalt(8)
+        key = generateSalt(16)
+        salt = generateSalt(8)
         val factory = SecretKeyFactory.getInstance(AES_KDF)
         val spec = PBEKeySpec(key.toCharArray(), salt.toByteArray(), iterationCount, keyStrength)
         val secretKey = factory.generateSecret(spec)
@@ -31,7 +34,7 @@ class AESImpl : AES {
         cipher = Cipher.getInstance(AES_PADDING_SCHEME)
         cipher?.init(Cipher.ENCRYPT_MODE, secretKeySpec)
         ivParameterSpec = IvParameterSpec(cipher?.iv)
-        val iv = cipher?.iv
+        iv =  ivParameterSpec!!.iv as ByteArray
     }
 
     private fun generateSalt(length: Int): String {
@@ -58,4 +61,29 @@ class AESImpl : AES {
         return cipher?.doFinal(Base64.decode(data?.toByteArray(), 0))?.let { String(it) }
     }
 
+    override fun encrypt(data: Any): String {
+        val plainData = clearDataBreakLines(Gson().toJson(data))
+        cipher?.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
+        return clearData(Base64.encode(cipher?.doFinal(plainData.toByteArray()), Base64.DEFAULT))
+    }
+
+    override fun decrypt(data: Any?): String? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun key(): String {
+        return this.key
+    }
+
+    override fun salt(): String {
+        return this.salt
+    }
+
+    override fun iv(): String {
+        return Base64.encodeToString(this.iv, 0)
+    }
+
+    private fun clearDataBreakLines(data: String): String {
+        return data.replace("\n", "").replace("\n", "")
+    }
 }

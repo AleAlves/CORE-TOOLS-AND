@@ -22,14 +22,14 @@ class CryptoImpl : Crypto {
         if (rsa == null) {
             rsa = RSAimpl(publicKey)
         }
-        return rsa!!
+        return rsa as RSA
     }
 
     override fun AES(): AES {
         if (aes == null) {
             aes = AESImpl()
         }
-        return aes!!
+        return aes as AES
     }
 
 }

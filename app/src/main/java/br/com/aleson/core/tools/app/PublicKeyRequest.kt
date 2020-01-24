@@ -7,7 +7,7 @@ import retrofit2.http.GET
 
 interface PublicKeyRequest {
 
-    @GET("api/v1/publicKey")
+    @GET("api/v1/public-key")
     fun getPublicKey(): Call<HTTPResponse<PublicKey>>
 
 }
