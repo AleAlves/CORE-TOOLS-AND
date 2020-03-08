@@ -1,14 +1,14 @@
 package br.com.aleson.core.tools.coretools.cryptography.rsa
 
 import android.util.Base64
-import br.com.aleson.core.tools.coretools.cryptography.PUBLIC_KEY_CLEN_REGEX
-import br.com.aleson.core.tools.coretools.cryptography.RSA_KDF
-import br.com.aleson.core.tools.coretools.cryptography.RSA_PADDING_SCHEME
 import com.google.gson.Gson
 import java.security.KeyFactory
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
 
+const val RSA_KDF = "RSA"
+const val RSA_PADDING_SCHEME = "RSA/ECB/PKCS1Padding"
+val PUBLIC_KEY_CLEN_REGEX = "(-+BEGIN PUBLIC KEY-+\\r?\\n|-+END PUBLIC KEY-+\\r?\\n?)".toRegex()
 
 class RSAimpl(private val publicKey: String) : RSA {
 
@@ -33,7 +33,7 @@ class RSAimpl(private val publicKey: String) : RSA {
     override fun encrypt(data: String): String {
         val plainData = clearDataBreakLines(data)
         val publicKey = clearPublicKey(publicKey)
-        val keyBytes = Base64.decode(publicKey, 0)
+        val keyBytes = Base64.decode(publicKey, Base64.DEFAULT)
         val spec = X509EncodedKeySpec(keyBytes)
         val kf = KeyFactory.getInstance(RSA_KDF)
         val pk = kf.generatePublic(spec)
@@ -47,7 +47,7 @@ class RSAimpl(private val publicKey: String) : RSA {
     override fun encrypt(data: Any): String {
         val plainData = clearDataBreakLines(Gson().toJson(data))
         val publicKey = clearPublicKey(publicKey)
-        val keyBytes = Base64.decode(publicKey, 0)
+        val keyBytes = Base64.decode(publicKey, Base64.DEFAULT)
         val spec = X509EncodedKeySpec(keyBytes)
         val kf = KeyFactory.getInstance(RSA_KDF)
         val pk = kf.generatePublic(spec)

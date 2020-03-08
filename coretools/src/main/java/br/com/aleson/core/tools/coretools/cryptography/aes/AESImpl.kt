@@ -1,10 +1,6 @@
 package br.com.aleson.core.tools.coretools.cryptography.aes
 
 import android.util.Base64
-import br.com.aleson.core.tools.coretools.cryptography.AES_ALGORITHM
-import br.com.aleson.core.tools.coretools.cryptography.AES_KDF
-import br.com.aleson.core.tools.coretools.cryptography.AES_PADDING_SCHEME
-import br.com.aleson.core.tools.coretools.cryptography.STANDAR_CHARS
 import com.google.gson.Gson
 import java.util.*
 import javax.crypto.Cipher
@@ -13,20 +9,27 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
+const val AES_KDF = "PBKDF2WithHmacSHA1"
+const val AES_ALGORITHM = "AES"
+const val AES_PADDING_SCHEME = "AES/CBC/PKCS5Padding"
+const val STANDAR_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+
 class AESImpl : AES {
 
     private var cipher: Cipher? = null
     private var secretKeySpec: SecretKeySpec? = null
     private val iterationCount = 2048
     private val keyStrength = 256
+    private val keyLength = 16
+    private val saltLength = 8
     private var ivParameterSpec: IvParameterSpec? = null
     private var key: String
     private var salt: String
     private var iv: ByteArray?
 
     init {
-        key = generateSalt(16)
-        salt = generateSalt(8)
+        key = generateKey(keyLength)
+        salt = generateSalt(saltLength)
         val factory = SecretKeyFactory.getInstance(AES_KDF)
         val spec = PBEKeySpec(key.toCharArray(), salt.toByteArray(), iterationCount, keyStrength)
         val secretKey = factory.generateSecret(spec)
@@ -37,7 +40,10 @@ class AESImpl : AES {
         iv =  ivParameterSpec!!.iv as ByteArray
     }
 
-    private fun generateSalt(length: Int): String {
+
+    private fun generateSalt(length: Int) = generateKey(length)
+
+    private fun generateKey(length: Int): String {
         val salt = StringBuilder()
         val random = Random(System.currentTimeMillis())
         while (salt.length < length) {

@@ -25,10 +25,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         core = CoreToolsBuilder.Builder()
-            .server("http://192.168.0.18:8084/")
+            .server("http://192.168.0.11:8084/")
             .build()
-
-        this.detectOpenGLES20()
 
         val encrypted = core.crypto.AES().encrypt("wow")
         val plainData = core.crypto.AES().decrypt(encrypted)
@@ -50,20 +48,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun detectOpenGLES20() {
-        val result: Int
-        val activityManager =
-            getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val configInfo = activityManager.deviceConfigurationInfo
-        result = if (configInfo.reqGlEsVersion != ConfigurationInfo.GL_ES_VERSION_UNDEFINED) {
-            configInfo.reqGlEsVersion
-        } else {
-            1 shl 16 // Lack of property means OpenGL ES version 1
-        }
-
-        Log.e("reqGlEsVersion", result.toString())
-        Log.e("getGlEsVersion", configInfo.glEsVersion)
-    }
 
     interface PublicKeyCallback {
 
