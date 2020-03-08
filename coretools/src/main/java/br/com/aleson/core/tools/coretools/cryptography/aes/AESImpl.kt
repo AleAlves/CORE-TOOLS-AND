@@ -1,6 +1,7 @@
 package br.com.aleson.core.tools.coretools.cryptography.aes
 
 import android.util.Base64
+import android.util.Base64.NO_PADDING
 import com.google.gson.Gson
 import java.util.*
 import javax.crypto.Cipher
@@ -59,7 +60,7 @@ class AESImpl : AES {
 
     override fun encrypt(data: String): String {
         cipher?.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
-        return clearData(Base64.encode(cipher?.doFinal(data.toByteArray()), Base64.DEFAULT))
+        return clearData(Base64.encode(cipher?.doFinal(data.toByteArray()), NO_PADDING))
     }
 
     override fun decrypt(data: String?): String? {
@@ -70,7 +71,7 @@ class AESImpl : AES {
     override fun encrypt(data: Any): String {
         val plainData = clearDataBreakLines(Gson().toJson(data))
         cipher?.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
-        return clearData(Base64.encode(cipher?.doFinal(plainData.toByteArray()), Base64.DEFAULT))
+        return clearData(Base64.encode(cipher?.doFinal(plainData.toByteArray()), NO_PADDING))
     }
 
     override fun decrypt(data: Any?): String? {
@@ -86,7 +87,7 @@ class AESImpl : AES {
     }
 
     override fun iv(): String {
-        return Base64.encodeToString(this.iv, 0)
+        return String(Base64.encode(this.iv, NO_PADDING))
     }
 
     private fun clearDataBreakLines(data: String): String {
