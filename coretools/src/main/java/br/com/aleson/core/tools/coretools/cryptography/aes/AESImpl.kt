@@ -14,7 +14,7 @@ import javax.crypto.spec.SecretKeySpec
 const val AES_KDF = "PBKDF2WithHmacSHA1"
 const val AES_ALGORITHM = "AES"
 const val AES_PADDING_SCHEME = "AES/CBC/PKCS5Padding"
-const val STANDAR_CHARS = "a"
+const val STANDAR_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
 
 class AESImpl : AES {
 
@@ -54,7 +54,6 @@ class AESImpl : AES {
             val index = (random.nextFloat() * STANDAR_CHARS.length).toInt()
             salt.append(STANDAR_CHARS[index])
         }
-        return salt.toString()
         return salt.toString()
     }
 
