@@ -4,7 +4,7 @@ import android.util.Base64
 import android.util.Base64.DEFAULT
 import com.google.gson.Gson
 import java.nio.charset.Charset
-import java.util.*
+import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.IvParameterSpec
@@ -49,7 +49,7 @@ class AESImpl : AES {
 
     private fun generateKey(length: Int): String {
         val salt = StringBuilder()
-        val random = Random(System.currentTimeMillis())
+        val random = SecureRandom()
         while (salt.length < length) {
             val index = (random.nextFloat() * STANDAR_CHARS.length).toInt()
             salt.append(STANDAR_CHARS[index])

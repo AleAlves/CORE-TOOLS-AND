@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         core = CoreToolsBuilder.Builder()
-            .server("http://192.168.0.11:8084/")
+            .server("https://daily-rewards-node-api.herokuapp.com/")
             .build()
 
         val encrypted = core.crypto.AES().encrypt("wow")
