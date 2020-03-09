@@ -1,8 +1,9 @@
 package br.com.aleson.core.tools.coretools.cryptography.aes
 
 import android.util.Base64
-import android.util.Base64.NO_PADDING
+import android.util.Base64.DEFAULT
 import com.google.gson.Gson
+import java.nio.charset.Charset
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
@@ -13,7 +14,7 @@ import javax.crypto.spec.SecretKeySpec
 const val AES_KDF = "PBKDF2WithHmacSHA1"
 const val AES_ALGORITHM = "AES"
 const val AES_PADDING_SCHEME = "AES/CBC/PKCS5Padding"
-const val STANDAR_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+const val STANDAR_CHARS = "a"
 
 class AESImpl : AES {
 
@@ -31,18 +32,20 @@ class AESImpl : AES {
     init {
         key = generateKey(keyLength)
         salt = generateSalt(saltLength)
+        iv = generateIv(keyLength).toByteArray(Charset.defaultCharset())
         val factory = SecretKeyFactory.getInstance(AES_KDF)
         val spec = PBEKeySpec(key.toCharArray(), salt.toByteArray(), iterationCount, keyStrength)
         val secretKey = factory.generateSecret(spec)
         secretKeySpec = SecretKeySpec(secretKey.encoded, AES_ALGORITHM)
         cipher = Cipher.getInstance(AES_PADDING_SCHEME)
         cipher?.init(Cipher.ENCRYPT_MODE, secretKeySpec)
-        ivParameterSpec = IvParameterSpec(cipher?.iv)
-        iv =  ivParameterSpec!!.iv as ByteArray
+        ivParameterSpec = IvParameterSpec(iv)
     }
 
 
     private fun generateSalt(length: Int) = generateKey(length)
+
+    private fun generateIv(length: Int) = generateKey(length)
 
     private fun generateKey(length: Int): String {
         val salt = StringBuilder()
@@ -52,6 +55,7 @@ class AESImpl : AES {
             salt.append(STANDAR_CHARS[index])
         }
         return salt.toString()
+        return salt.toString()
     }
 
     private fun clearData(data: ByteArray): String {
@@ -60,7 +64,7 @@ class AESImpl : AES {
 
     override fun encrypt(data: String): String {
         cipher?.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
-        return clearData(Base64.encode(cipher?.doFinal(data.toByteArray()), NO_PADDING))
+        return clearData(Base64.encode(cipher?.doFinal(data.toByteArray()), DEFAULT))
     }
 
     override fun decrypt(data: String?): String? {
@@ -71,7 +75,7 @@ class AESImpl : AES {
     override fun encrypt(data: Any): String {
         val plainData = clearDataBreakLines(Gson().toJson(data))
         cipher?.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
-        return clearData(Base64.encode(cipher?.doFinal(plainData.toByteArray()), NO_PADDING))
+        return clearData(Base64.encode(cipher?.doFinal(plainData.toByteArray()), DEFAULT))
     }
 
     override fun decrypt(data: Any?): String? {
@@ -87,7 +91,7 @@ class AESImpl : AES {
     }
 
     override fun iv(): String {
-        return String(Base64.encode(this.iv, NO_PADDING))
+        return this.iv?.let { String(it, Charset.defaultCharset()) }.toString()
     }
 
     private fun clearDataBreakLines(data: String): String {
